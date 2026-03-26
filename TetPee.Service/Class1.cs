@@ -1,5 +1,6 @@
-﻿namespace TetPee.Service;
-
-public class Class1
+﻿namespace TetPee.Service
 {
+    public class Class1
+    {
+    }
 }
