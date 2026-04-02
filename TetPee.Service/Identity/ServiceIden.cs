@@ -24,6 +24,7 @@ public class ServiceIden: IServiceIden
     public async Task<Response.IdentityResponse> Login(string email, string password)
     {
         var user = await _dbContext.Users
+            .Include(u => u.Seller)
             .FirstOrDefaultAsync(u => u.Email == email);
 
         if (user == null)
@@ -47,6 +48,15 @@ public class ServiceIden: IServiceIden
             new Claim(ClaimTypes.Expired,
                 DateTimeOffset.UtcNow.AddMinutes(_jwtOptions.ExpireMinutes).ToString()),
         };
+
+        if (user.Role == "Seller")
+        {
+            var seller = await _dbContext.Sellers.FirstOrDefaultAsync(u => u.UserId == user.Id);
+            if (seller != null)
+            {
+                claims.Add(new Claim("SellerId", seller.Id.ToString()));
+            }
+        }
         
         var token = _jwtService.GenerateAccessToken(claims);
 

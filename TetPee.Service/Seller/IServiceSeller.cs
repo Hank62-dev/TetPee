@@ -12,4 +12,6 @@ public interface IServiceSeller
     );
 
     public Task<string> CreateSeller(Request.CreateSellerRequest request);
+
+    // public Task SendEmail();
 }

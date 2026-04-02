@@ -2,6 +2,7 @@
 using TetPee.Repository;
 using TetPee.Repository.Entity;
 using TetPee.Service.Category;
+using TetPee.Service.Models;
 using TetPee.Service.User;
 
 namespace TetPee.Api.Controllers;
@@ -25,13 +26,13 @@ public class CateController : ControllerBase
     public async Task<IActionResult> GetAllCates()
     {
         var result = await _cateService.GetAllCates();
-        return Ok(result);
+        return Ok(ApiResponseFactory.SuccessReponse(result, " Cate retrieved successfully", HttpContext.TraceIdentifier));
     }
     
     [HttpGet("{parentId}/childrens")]
     public async Task<IActionResult> GetAllChildCatesById(Guid parentId)
     {
         var result = await _cateService.GetAllChildCatesById(parentId);
-        return Ok(parentId);
+        return Ok(ApiResponseFactory.SuccessReponse(result, "Child cate retrieved successfully", HttpContext.TraceIdentifier));
     }
 }

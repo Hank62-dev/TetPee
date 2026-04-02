@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using TetPee.Repository;
+using TetPee.Service.MailService;
 
 namespace TetPee.Service.Seller;
 
@@ -7,9 +8,11 @@ public class ServiceSeller: IServiceSeller
 {
     
     private readonly AppDbContext _dbContext;
-    public ServiceSeller(AppDbContext dbContext)
+    private readonly IService _mailService;
+    public ServiceSeller(AppDbContext dbContext, IService mailService)
     {
         _dbContext = dbContext;
+        _mailService = mailService;
     }
     
     public async Task<Base.Response.PageResult<Response.GetSellerResponse>> GetSellers(string? searchTerm, int pageSize, int pageIndex)
@@ -112,6 +115,16 @@ public class ServiceSeller: IServiceSeller
             _dbContext.Add(seller);
     
             var sellerResult = await _dbContext.SaveChangesAsync();
+
+
+            await _mailService.SendMail(new MailContent()
+            {
+                To = request.Email,
+                Subject = "Welcome to TetPee",
+                Body = $"<!DOCTYPE html>\n\n<html>\n<head>\n    <meta charset=\"UTF-8\">\n    <title>Welcome to TetPee</title>\n</head>\n<body style=\"margin:0; padding:0; background-color:#f4f6f8; font-family:Arial, sans-serif;\">\n    <table align=\"center\" width=\"100%\" cellpadding=\"0\" cellspacing=\"0\" style=\"padding:40px 0;\">\n        <tr>\n            <td>\n                <table align=\"center\" width=\"600\" cellpadding=\"0\" cellspacing=\"0\" style=\"background:#ffffff; border-radius:12px; overflow:hidden; box-shadow:0 4px 20px rgba(0,0,0,0.08);\">\n\n```\n                <!-- Header -->\n                <tr>\n                    <td style=\"background:linear-gradient(135deg,#6a11cb,#2575fc); padding:30px; text-align:center; color:#fff;\">\n                        <h1 style=\"margin:0; font-size:28px;\">Welcome to TetPee 🎉</h1>\n                    </td>\n                </tr>\n\n                <!-- Content -->\n                <tr>\n                    <td style=\"padding:30px;\">\n                        <h2 style=\"margin-top:0; color:#333;\">\n                            Dear {{{{FirstName}}}} {{{{LastName}}}},\n                        </h2>\n\n                        <p style=\"color:#555; font-size:16px; line-height:1.6;\">\n                            We're excited to have you join <b>TetPee</b> 🚀\n                        </p>\n\n                        <p style=\"color:#555; font-size:16px; line-height:1.6;\">\n                            Your account has been successfully created. You can now explore all features, manage your products, and enjoy our platform.\n                        </p>\n\n                        <!-- Button -->\n                        <div style=\"text-align:center; margin:30px 0;\">\n                            <a href=\"#\" style=\"background:#2575fc; color:#fff; padding:12px 24px; text-decoration:none; border-radius:8px; font-weight:bold;\">\n                                Get Started\n                            </a>\n                        </div>\n\n                        <p style=\"color:#555; font-size:14px;\">\n                            If you have any questions, feel free to contact us anytime.\n                        </p>\n\n                        <p style=\"color:#333; font-weight:bold;\">\n                            — The TetPee Team 💙\n                        </p>\n                    </td>\n                </tr>\n\n                <!-- Footer -->\n                <tr>\n                    <td style=\"background:#f1f1f1; padding:15px; text-align:center; font-size:12px; color:#888;\">\n                        © 2026 TetPee. All rights reserved.\n                    </td>\n                </tr>\n\n            </table>\n        </td>\n    </tr>\n</table>\n```\n\n</body>\n</html>\n"
+                       
+            });
+            
             
             if(sellerResult > 0) return "Add seller success";
             

@@ -13,6 +13,12 @@ public class ProductController: ControllerBase
     private readonly AppDbContext _dbContext;
     private readonly IService _serviceProduct;
 
+    public ProductController(AppDbContext dbContext, IService serviceProduct)
+    {
+        _dbContext = dbContext;
+        _serviceProduct = serviceProduct;
+    }
+
     [Authorize(Policy = JwtExtensions.SellerPolicy)]
     [HttpPost("")]
     public async Task<IActionResult> CreateProduct([FromBody] Resquest.CreateProductRequest request)

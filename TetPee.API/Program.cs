@@ -1,3 +1,4 @@
+using MailKit;
 using Microsoft.EntityFrameworkCore;
 using TetPee.Api.Extensions;
 using TetPee.Api.Middlewares;
@@ -7,7 +8,10 @@ using TetPee.Service.Identity;
 using TetPee.Service.JwtService;
 using TetPee.Service.Seller;
 using TetPee.Service.User;
-
+using TetPee.Service.MailService;
+using IService = TetPee.Service.User.IService;
+using MailService = TetPee.Service.MailService;
+using Service = TetPee.Service.User.Service;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -18,6 +22,7 @@ builder.Services.AddControllers(); //cho dùng API controller [Apicontroller]
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+builder.Services.AddHttpContextAccessor();
 //tạo UI test API(Swagger)
 
 builder.Services.AddDbContext<AppDbContext>(options =>
@@ -37,6 +42,7 @@ builder.Services.AddScoped<IServiceIden, ServiceIden>();
 builder.Services.AddScoped<IJwtService, JwtService>();
 builder.Services.AddScoped<TetPee.Service.Product.IService, TetPee.Service.Product.Service>();
 builder.Services.AddScoped<TetPee.Service.MediaService.IService, TetPee.Service.CloudinaryService.Service>();
+builder.Services.AddScoped<MailService.IService, MailService.Service>();
 // đăng ki Service (Dependency Injection)
 
 builder.Services.AddTransient<GlobalExceptionHandlerMiddleware>();
@@ -53,8 +59,10 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
-
+app.UseAuthentication();
 app.UseAuthorization();
+
+
 
 app.MapControllers();
 

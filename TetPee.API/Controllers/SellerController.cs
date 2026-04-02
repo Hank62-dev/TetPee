@@ -6,7 +6,7 @@ using TetPee.Service.Seller;
 
 namespace TetPee.Api.Controllers;
 
-[Authorize(Policy = JwtExtensions.AdminPolicy)]
+// [Authorize(Policy = JwtExtensions.AdminPolicy)]
 [ApiController]
 [Route("[controller]")]
 public class SellerController: ControllerBase

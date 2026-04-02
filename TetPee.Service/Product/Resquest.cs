@@ -8,7 +8,11 @@ public class Resquest
         public required string Description { get; set; }
         public required decimal Price { get; set; }
         public required int Quantity { get; set; }
-        public required Guid SellerId { get; set; }
+        
+
+        // public Guid SellerId { get; set; }
+        public List<Guid>? CategoryIds { get; set; }
+        // public required Guid SellerId { get; set; }
         
     }
 }
