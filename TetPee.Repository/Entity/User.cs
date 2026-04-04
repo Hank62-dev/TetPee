@@ -19,7 +19,7 @@ public class User: BaseEntity<Guid>, IAuditableEntity
     
     public Seller? Seller { get; set; }
     public ICollection<Order> Orders { get; set; } = new List<Order>();
-    
+    public Cart? Cart { get; set; }
     public DateTimeOffset CreatedAt { get; set; }
     public DateTimeOffset? UpdatedAt { get; set; }
 }

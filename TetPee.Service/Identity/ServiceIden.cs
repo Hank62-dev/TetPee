@@ -40,7 +40,7 @@ public class ServiceIden: IServiceIden
         //user nay chac chan la ton tai
         var claims = new List<Claim>
         {
-            new Claim("UserID", user.Id.ToString()),
+            new Claim("UserId", user.Id.ToString()),
             new Claim("Email", user.Email),
             new Claim("Role", user.Role),
             new Claim(ClaimTypes.Role, user.Role),

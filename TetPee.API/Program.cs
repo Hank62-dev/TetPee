@@ -12,6 +12,7 @@ using TetPee.Service.MailService;
 using IService = TetPee.Service.User.IService;
 using MailService = TetPee.Service.MailService;
 using Service = TetPee.Service.User.Service;
+using CartService = TetPee.Service.Cart;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -43,6 +44,7 @@ builder.Services.AddScoped<IJwtService, JwtService>();
 builder.Services.AddScoped<TetPee.Service.Product.IService, TetPee.Service.Product.Service>();
 builder.Services.AddScoped<TetPee.Service.MediaService.IService, TetPee.Service.CloudinaryService.Service>();
 builder.Services.AddScoped<MailService.IService, MailService.Service>();
+builder.Services.AddScoped<CartService.IService, CartService.Service>();
 // đăng ki Service (Dependency Injection)
 
 builder.Services.AddTransient<GlobalExceptionHandlerMiddleware>();
